@@ -1,0 +1,38 @@
+
+services:
+  master:
+    build:
+      context: .
+      dockerfile: Dockerfile.master
+    container_name: master
+    ports:
+      - "2222:22"
+    networks:
+      cluster_net:
+        ipv4_address: 192.168.0.2
+    stdin_open: true
+    tty: true
+  node1:
+    build:
+      context: .
+      dockerfile: Dockerfile.nodes
+    container_name: node1
+    networks:
+      cluster_net:
+        ipv4_address: 192.168.0.3
+
+  node2:
+    build:
+      context: .
+      dockerfile: Dockerfile.nodes
+    container_name: node2
+    networks:
+      cluster_net:
+        ipv4_address: 192.168.0.4
+
+networks:
+  cluster_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/16
